@@ -1,1 +1,502 @@
-13552
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>阅前须知</title>
+    <style>
+        /* ===== 全局重置 & 字体 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(145deg, #f9ecec 0%, #f0d6d6 100%);
+            font-family: 'Georgia', 'Times New Roman', '宋体', serif;
+            padding: 20px;
+        }
+
+        /* ===== 信封卡片 ===== */
+        .envelope {
+            max-width: 700px;
+            width: 100%;
+            background: #fefcf6;
+            padding: 50px 55px 45px;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(160, 80, 80, 0.20), 0 8px 24px rgba(160, 80, 80, 0.08),
+                inset 0 1px 2px rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(220, 180, 180, 0.25);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .envelope:hover {
+            transform: translateY(-4px);
+        }
+
+        /* ===== 信头 ===== */
+        .letter-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0e0dc;
+        }
+
+        .letter-header h1 {
+            font-size: 28px;
+            font-weight: 400;
+            color: #5a3e3a;
+            letter-spacing: 2px;
+            font-family: 'Georgia', serif;
+        }
+
+        .letter-header .greeting {
+            font-size: 18px;
+            color: #7a5d57;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        /* ===== 信件正文 ===== */
+        .letter-body {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #3d2c28;
+            padding: 6px 4px 12px;
+        }
+
+        .letter-body p {
+            margin-bottom: 18px;
+            text-indent: 2em;
+        }
+
+        .letter-body p:last-of-type {
+            margin-bottom: 8px;
+        }
+
+        .letter-body .signature {
+            text-align: right;
+            font-style: italic;
+            font-size: 18px;
+            color: #6b4c45;
+            margin-top: 20px;
+            text-indent: 0;
+            letter-spacing: 1px;
+        }
+
+        .letter-body .signature small {
+            font-size: 14px;
+            color: #9b7a72;
+            display: block;
+            margin-top: 2px;
+            font-style: normal;
+        }
+
+        /* ===== 爱心装饰分隔 ===== */
+        .divider {
+            text-align: center;
+            font-size: 20px;
+            letter-spacing: 8px;
+            color: #dbb6ae;
+            margin: 10px 0 20px;
+            user-select: none;
+        }
+
+        /* ===== 图片样式 ===== */
+        .letter-image {
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        .letter-image img {
+            max-width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0e0dc;
+            transition: transform 0.3s ease;
+        }
+
+        .letter-image img:hover {
+            transform: scale(1.01);
+        }
+
+        /* ===== 按钮区域 ===== */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 35px;
+            padding-top: 28px;
+            border-top: 2px solid #f0e0dc;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 44px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            letter-spacing: 1.5px;
+            position: relative;
+            min-width: 140px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* —— 拒绝按钮 —— */
+        .btn-decline {
+            background: #f0e6e3;
+            color: #7a5d57;
+            box-shadow: 0 4px 12px rgba(160, 80, 80, 0.08);
+        }
+
+        .btn-decline:hover:not(:disabled) {
+            background: #e8d8d4;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(160, 80, 80, 0.15);
+        }
+
+        .btn-decline:active:not(:disabled) {
+            transform: translateY(0px);
+            box-shadow: 0 2px 8px rgba(160, 80, 80, 0.10);
+        }
+
+        /* —— 接受按钮 —— */
+        .btn-accept {
+            background: #c0392b;
+            color: #fff;
+            box-shadow: 0 6px 18px rgba(192, 57, 43, 0.25);
+        }
+
+        .btn-accept:hover:not(:disabled) {
+            background: #a93226;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(192, 57, 43, 0.35);
+        }
+
+        .btn-accept:active:not(:disabled) {
+            transform: translateY(0px);
+            box-shadow: 0 4px 12px rgba(192, 57, 43, 0.20);
+        }
+
+        /* —— 禁用状态（灰色 + 不可点击） —— */
+        .btn-accept:disabled {
+            background: #b0a09a;
+            color: #f0ecea;
+            box-shadow: none;
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none !important;
+        }
+
+        /* —— 倒计时徽章 —— */
+        .countdown-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.20);
+            border-radius: 40px;
+            padding: 0 14px;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 28px;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            margin-left: 6px;
+        }
+
+        .btn-accept:disabled .countdown-badge {
+            background: rgba(255, 255, 255, 0.25);
+            color: #fff;
+        }
+
+        /* ===== 浮动消息提示 ===== */
+        .floating-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(60, 40, 36, 0.92);
+            color: #f9f0ea;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 17px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.20);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 215, 200, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 600px) {
+            .envelope {
+                padding: 30px 22px 30px;
+            }
+
+            .letter-header h1 {
+                font-size: 22px;
+            }
+            .letter-header .greeting {
+                font-size: 15px;
+            }
+
+            .letter-body {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+
+            .btn {
+                padding: 12px 28px;
+                font-size: 16px;
+                min-width: 110px;
+            }
+
+            .actions {
+                gap: 16px;
+            }
+
+            .countdown-badge {
+                font-size: 13px;
+                padding: 0 10px;
+                line-height: 24px;
+            }
+
+            .letter-image img {
+                border-radius: 12px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .envelope {
+                padding: 24px 16px 24px;
+            }
+            .btn {
+                padding: 10px 18px;
+                font-size: 14px;
+                min-width: 90px;
+            }
+            .actions {
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 信封卡片 ===== -->
+    <div class="envelope" role="article" aria-label="信件">
+
+        <!-- 信头 -->
+        <div class="letter-header">
+            <h1>✧ 阅 前 须 知 ✧</h1>
+            <div class="greeting">—— 喵 ——</div>
+        </div>
+
+        <!-- 信件正文 -->
+        <div class="letter-body">
+
+            <p>
+                此网站仅为收录部分有趣项目
+            </p>
+
+            <p>
+                本网站所收录内容均不代表编者立场
+            </p>
+
+            <p>
+                图片可任意使用，但请不要随意传播里界面
+            </p>
+
+            <p>
+                如有冒犯请联系删除  <small> <small> <small> 社长就算了</small></small></small>
+            </p>
+    
+
+            <div class="signature">
+                <small>———编者</small>
+            </div>
+
+            <!-- ===== 文末图片 ===== -->
+            <div class="letter-image">
+                <img src="https://img.hyql.dpdns.org/img/超级一中.png" alt="1" width="600" height="300" loading="lazy" />
+            </div>
+
+        </div>
+
+        <!-- ===== 按钮区域 ===== -->
+        <div class="actions">
+
+            <!-- 拒绝按钮 -->
+            <button class="btn btn-decline" id="declineBtn" aria-label="拒绝">
+                ✦ 拒 绝
+            </button>
+
+            <!-- 接受按钮（初始禁用 + 倒计时） -->
+            <button class="btn btn-accept" id="acceptBtn" disabled aria-label="接受">
+                ✦ 服役
+                <span class="countdown-badge" id="countdownBadge">5s</span>
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // ================================================================
+            //  🔗 跳转链接配置 —— 在这里修改跳转地址
+            // ================================================================
+            const ACCEPT_URL = 'https://hyqlwy.github.io/acgn50welcome/';   // 点击「接受」后跳转
+            const DECLINE_URL = 'https://hyqlwy.github.io/acgn50welcome/'; // 点击「拒绝」后跳转
+            // ================================================================
+
+            const acceptBtn = document.getElementById('acceptBtn');
+            const declineBtn = document.getElementById('declineBtn');
+            const badge = document.getElementById('countdownBadge');
+
+            let countdown = 5;
+            let timer = null;
+            let isCountdownFinished = false;
+
+            // ===== 更新按钮状态 =====
+            function updateButton() {
+                if (countdown > 0) {
+                    acceptBtn.disabled = true;
+                    badge.textContent = countdown + 's';
+                    acceptBtn.title = `还需等待 ${countdown} 秒`;
+                } else {
+                    acceptBtn.disabled = false;
+                    badge.textContent = '✓';
+                    acceptBtn.title = '点击接受';
+                    isCountdownFinished = true;
+                    if (timer) {
+                        clearInterval(timer);
+                        timer = null;
+                    }
+                }
+            }
+
+            // ===== 倒计时 =====
+            function startCountdown() {
+                if (timer) return;
+                timer = setInterval(function() {
+                    countdown -= 1;
+                    if (countdown < 0) countdown = 0;
+                    updateButton();
+                    if (countdown === 0) {
+                        if (timer) {
+                            clearInterval(timer);
+                            timer = null;
+                        }
+                        acceptBtn.style.transition = 'background 0.4s ease';
+                        acceptBtn.style.background = '#c0392b';
+                    }
+                }, 1000);
+            }
+
+            // ===== 页面跳转（带延迟，让用户看到反馈） =====
+            function redirectTo(url, message, delay = 800) {
+                // 显示提示消息
+                showFloatingMessage(message, delay + 300);
+
+                // 延迟后跳转
+                setTimeout(function() {
+                    window.location.href = url;
+                }, delay);
+            }
+
+            // ===== 点击「接受」 =====
+            function handleAccept() {
+                if (!isCountdownFinished) return;
+
+                // 按钮视觉反馈
+                acceptBtn.textContent = '为阜阳一中服役！';
+                acceptBtn.disabled = true;
+                acceptBtn.style.background = '#27ae60';
+                acceptBtn.style.boxShadow = '0 6px 18px rgba(39, 174, 96, 0.35)';
+                acceptBtn.title = '跳转中…';
+                const badgeEl = acceptBtn.querySelector('.countdown-badge');
+                if (badgeEl) badgeEl.style.display = 'none';
+
+                declineBtn.disabled = true;
+                declineBtn.style.opacity = '0.5';
+                declineBtn.style.cursor = 'not-allowed';
+
+                // 跳转到「接受」页面
+                redirectTo(ACCEPT_URL, '少女折寿中…', 900);
+            }
+
+            // ===== 点击「拒绝」 =====
+            function handleDecline() {
+                // 按钮视觉反馈
+                declineBtn.textContent = '✧ 已拒绝为阜阳一中服役！';
+                declineBtn.disabled = true;
+                declineBtn.style.background = '#d5c4be';
+                declineBtn.style.color = '#6b4c45';
+                declineBtn.style.cursor = 'not-allowed';
+                declineBtn.style.opacity = '0.6';
+
+                // 跳转到「拒绝」页面
+                redirectTo(DECLINE_URL, '竟然不许喵~', 900);
+            }
+
+            // ===== 浮动消息 =====
+            function showFloatingMessage(text, duration = 2000) {
+                const existing = document.querySelector('.floating-message');
+                if (existing) existing.remove();
+
+                const msg = document.createElement('div');
+                msg.className = 'floating-message';
+                msg.textContent = text;
+                document.body.appendChild(msg);
+
+                requestAnimationFrame(() => {
+                    msg.style.opacity = '1';
+                    msg.style.transform = 'translateX(-50%) translateY(0)';
+                });
+
+                setTimeout(() => {
+                    msg.style.opacity = '0';
+                    msg.style.transform = 'translateX(-50%) translateY(20px)';
+                    setTimeout(() => {
+                        if (msg.parentNode) msg.parentNode.removeChild(msg);
+                    }, 600);
+                }, duration);
+            }
+
+            // ===== 绑定事件 =====
+            acceptBtn.addEventListener('click', handleAccept);
+            declineBtn.addEventListener('click', handleDecline);
+
+            // ===== 初始化 =====
+            updateButton();
+            startCountdown();
+
+            console.log('💌 信件已加载，倒计时 5 秒后接受按钮可用。');
+            console.log('📌 跳转地址：接受 →', ACCEPT_URL, '，拒绝 →', DECLINE_URL);
+        })();
+    </script>
+
+</body>
+</html>
